@@ -3,6 +3,7 @@
 #include <string.h>
 #include <json-c/json.h>
 
+int dataSize = 0;
 //Stores relevant data from file
 struct devices{
     char * name, * type, * info;
@@ -42,6 +43,7 @@ struct devices * parseJson(FILE * f) {
         deviceInfo[i].payloadTotal += json_object_get_int(json_object_object_get(sensorsArray, "Payload"));
 
     }
+    dataSize = numDevices;
     return deviceInfo;
 }
 
@@ -57,10 +59,10 @@ void outputJson(struct devices * deviceInfo){
     char * uuid2[36];
     int location;
     FILE * output;
-
+    int size = 0;
     //sorting data by ascending order
-    for(int i = 0; i < 5; i++){
-        for(int w = i + 1; w < 5; w++){
+    for(int i = 0; i < dataSize; i++){
+        for(int w = i + 1; w < dataSize; w++){
             if(strcmp(deviceInfo[i].name, deviceInfo[w].name)){
                 a = deviceInfo[i];
                 deviceInfo[i] = deviceInfo[w];
@@ -70,7 +72,7 @@ void outputJson(struct devices * deviceInfo){
     }
 
     //adding struct data to new JSON object
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < dataSize; i++){
         json_object * curDevice = json_object_new_object();
         json_object_object_add(curDevice,"Name",json_object_new_string(deviceInfo[i].name));
         json_object_object_add(curDevice,"Type",json_object_new_string(deviceInfo[i].type));
