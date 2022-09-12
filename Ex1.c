@@ -6,7 +6,7 @@
 int dataSize = 0;
 //Stores relevant data from file
 struct devices{
-    char * name, * type, * info;
+    const char * name, * type, * info;
     int payloadTotal;
 };
 
@@ -56,7 +56,7 @@ void outputJson(struct devices * deviceInfo){
     struct devices a;
     char * info;
     char * uuid;
-    char * uuid2[36];
+    char * uuid2 = malloc(36);
     int location;
     FILE * output;
     int size = 0;
