@@ -3,6 +3,7 @@
 #include <string.h>
 #include <json-c/json.h>
 
+//Stores relevant data from file
 struct devices{
     char * name, * type, * info;
     int payloadTotal;
@@ -16,13 +17,16 @@ struct devices * parseJson(FILE * f) {
     json_object * sensors;
     json_object * sensorsArray;
     int numDevices;
+
+    //read input JSON file
     fseek(f,0L,SEEK_END);
     long size = ftell(f);
     fseek(f, 0L, SEEK_SET);
     data = malloc(size +1L);
     fread(data,1,size+1L,f);
-
     jobj = json_tokener_parse(data);
+
+    //obtain the data from the file and store into devices struct
     devices = json_object_object_get(jobj, "Devices");
     numDevices = json_object_array_length(devices);
     struct devices * deviceInfo = malloc(sizeof(*deviceInfo) * (numDevices));;
@@ -40,22 +44,41 @@ struct devices * parseJson(FILE * f) {
     }
     return deviceInfo;
 }
+
+//Reformats data and exports into new file
 void outputJson(struct devices * deviceInfo){
     json_object * jobj = json_object_new_object();
     json_object * devices = json_object_new_array();
+    json_object * arrayObj;
+    json_object * arrayObj2;
+    struct devices a;
     char * info;
     char * uuid;
-    char * uuid2;
+    char * uuid2[36];
     int location;
     FILE * output;
+
+    //sorting data by ascending order
+    for(int i = 0; i < 5; i++){
+        for(int w = i + 1; w < 5; w++){
+            if(strcmp(deviceInfo[i].name, deviceInfo[w].name)){
+                a = deviceInfo[i];
+                deviceInfo[i] = deviceInfo[w];
+                deviceInfo[w] = a;
+            }
+        }
+    }
+
+    //adding struct data to new JSON object
     for(int i = 0; i < 5; i++){
         json_object * curDevice = json_object_new_object();
         json_object_object_add(curDevice,"Name",json_object_new_string(deviceInfo[i].name));
         json_object_object_add(curDevice,"Type",json_object_new_string(deviceInfo[i].type));
+        uuid, info = malloc(sizeof(deviceInfo[i].info));
         uuid = strstr(deviceInfo[i].info, "uuid");
         info = deviceInfo[i].info;
         location = uuid - deviceInfo[i].info;
-        strncpy(uuid2, deviceInfo[i].info + (location + 5),36);
+	    strncpy(uuid2, deviceInfo[i].info + (location + 5),36);
         for(int i = location -1; i < (location + 41); i ++ ){
             if(info[i + 41] != NULL){
                 info[i] = info[i + 42];
@@ -69,8 +92,10 @@ void outputJson(struct devices * deviceInfo){
         json_object_object_add(curDevice,"PayloadTotal",json_object_new_int(deviceInfo[i].payloadTotal));
         json_object_array_add(devices, curDevice);
     }
+
     json_object_object_add(jobj,"Devices", devices);
     output = fopen("output.json", "w");
+    //outputing into file in correct format
     fprintf(output, "%s", json_object_to_json_string_ext(jobj, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY));
     fclose(output);
 }
@@ -83,7 +108,6 @@ int main(int argc,char ** argv){
    	}
 
     struct devices * deviceInfo = parseJson(file);
-
 
     outputJson(deviceInfo);
     fclose(file);
