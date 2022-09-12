@@ -1,4 +1,4 @@
-# IotechExercise
+# IotechExercise 01
 
 This Exercise was complete in C and tested on both Ubuntu and MacOS Montery. This solution utilises the Library Json-C which will need to be installed to compile. This library can be found at https://github.com/json-c/json-c
 
