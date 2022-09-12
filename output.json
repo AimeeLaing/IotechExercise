@@ -1,0 +1,39 @@
+{
+  "Devices": [
+    {
+      "Name": "Accelerometer-device",
+      "Type": "OPC-UA",
+      "Info": "An OPC-UA device, used to read an accelerometer",
+      "Uuid": "31bd12a2-e583-11ec-8fea-0242ac120002",
+      "PayloadTotal": 94
+    },
+    {
+      "Name": "accelerometer-device",
+      "Type": "OPC-UA",
+      "Info": "An OPC-UA device, used to read an accelerometer",
+      "Uuid": "2d9596e0-e583-11ec-8fea-0242ac120002",
+      "PayloadTotal": 34
+    },
+    {
+      "Name": "Light-level-device",
+      "Type": "Bacnet",
+      "Info": "A Bacnet device, used to read the light-level",
+      "Uuid": "29446300-e583-11ec-8fea-0242ac120002",
+      "PayloadTotal": 34
+    },
+    {
+      "Name": "Pressure-device",
+      "Type": "Modbus",
+      "Info": "A Modbus device, used to read the pressure",
+      "Uuid": "22919442-e583-11ec-8fea-0242ac120002",
+      "PayloadTotal": 75
+    },
+    {
+      "Name": "Temperature-device",
+      "Type": "Modbus",
+      "Info": "A Modbus device, used to read the temperature",
+      "Uuid": "c92788ea-e57c-11ec-8fea-0242ac120002",
+      "PayloadTotal": 10
+    }
+  ]
+}
